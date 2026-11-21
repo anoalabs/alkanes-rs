@@ -100,6 +100,23 @@ pub fn index_block(block: &Block, height: u32) -> Result<()> {
     let _updated_addresses =
         Protorune::index_block::<AlkaneMessageContext>(block.clone(), height.into())?;
 
+    // regtest_frsigil: home the frSIGIL premine, mainnet's DIESEL v3
+    // governance set and its capability units on this block's coinbase (a
+    // b8-controlled, spendable regtest outpoint) AFTER protorune has indexed
+    // the block, so its own OUTPOINT_TO_RUNES writes can never clobber ours.
+    // b8 mines this height's coinbase to its dedicated index-root address.
+    #[cfg(feature = "regtest_frsigil")]
+    if is_active(height.into()) && height == crate::network::FRSIGIL_PREMINE_HEIGHT {
+        if let Some(coinbase) = block.txdata.first() {
+            let outpoint = bitcoin::OutPoint {
+                txid: coinbase.compute_txid(),
+                vout: 0,
+            };
+            crate::network::premine_frsigil(block, outpoint)?;
+            crate::network::setup_regtest_subminer(block, height, outpoint)?;
+        }
+    }
+
     if is_active(height.into()) {
         unwrap::update_last_block(height as u128)?;
     }

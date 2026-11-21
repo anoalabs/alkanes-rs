@@ -189,19 +189,26 @@ impl FuelTank {
         feature = "dogecoin",
         feature = "bellscoin",
         feature = "fractal",
-        feature = "luckycoin"
+        feature = "luckycoin",
+        feature = "regtest_frsigil"
     )))]
     pub fn _calculate_transaction_fuel(tank: &FuelTank, height: u32) -> u64 {
         // for testing it is useful to assume we always get minimum fuel
         minimum_fuel(height)
     }
 
+    // Production networks, and B8's `regtest_frsigil` chain: a tx is allotted
+    // the block's fuel in proportion to its share of the block's alkane
+    // bytes (`vfsize`), never less than the per-tx minimum. On regtest this
+    // lets operators see fuel starvation and the "pay for more block space to
+    // get more fuel" dynamic exactly as mainnet meters it.
     #[cfg(any(
         feature = "mainnet",
         feature = "dogecoin",
         feature = "bellscoin",
         feature = "fractal",
-        feature = "luckycoin"
+        feature = "luckycoin",
+        feature = "regtest_frsigil"
     ))]
     pub fn _calculate_transaction_fuel(tank: &FuelTank, height: u32) -> u64 {
         std::cmp::max(minimum_fuel(height), tank.block_metered_fuel)

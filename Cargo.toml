@@ -198,6 +198,18 @@ auth_token = []
 genesis_alkane = []
 diesel_v3 = []
 regtest = []
+# B8's regtest build (branch v3.0.0-rc.4-regtestfrsigil): `regtest` plus
+#   * the frSIGIL (32:1) premine deferred from genesis onto block 1's coinbase,
+#     a spendable outpoint the operator mines, so frBTC `set_signer` can be
+#     authorized while the auth check stays enforced;
+#   * DIESEL v3 live from genesis with mainnet's governance set deployed at its
+#     mainnet ids (SUBMINER-GATE 4:1001, treasury 2:96782, SUBMINER-AUTH
+#     2:96775, cFIRE-SIGIL 4:866, exact mainnet bytecode + init args), the
+#     capability tokens premined onto the same coinbase, and DIESEL's
+#     `/upgrade_initialized` preset so mints are one-per-tx as on mainnet;
+#   * mainnet's block-fuel accounting (a tx's fuel grows with its share of the
+#     block's alkane bytes) instead of the test-suite's flat minimum.
+regtest_frsigil = ["regtest"]
 genesis_protorune = []
 amm_pool = ["auth_token"]
 amm_factory = ["auth_token"]

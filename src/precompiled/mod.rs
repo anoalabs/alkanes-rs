@@ -24,3 +24,15 @@ pub mod fr_btc_build_v1_3_0;
 pub mod fr_btc_build_v1_3_1;
 pub mod fr_sigil_build;
 pub mod free_mint_build;
+// regtest_frsigil: the exact MAINNET bytecode of DIESEL v3's governance set
+// (fetched with `getbytecode`; byte-identical to the copies under
+// src/tests/static/), so the regtest chain runs the same gate, treasury,
+// payee token and cFIRE-SIGIL mainnet does. Only compiled into that build.
+#[cfg(feature = "regtest_frsigil")]
+pub mod regtest_mainnet_cfire_sigil_build;
+#[cfg(feature = "regtest_frsigil")]
+pub mod regtest_mainnet_subminer_auth_build;
+#[cfg(feature = "regtest_frsigil")]
+pub mod regtest_mainnet_subminer_gate_build;
+#[cfg(feature = "regtest_frsigil")]
+pub mod regtest_mainnet_subminer_treasury_build;

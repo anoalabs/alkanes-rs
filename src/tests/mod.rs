@@ -47,6 +47,8 @@ pub mod forge;
 pub mod getalias;
 #[cfg(test)]
 pub mod fr_btc;
+#[cfg(all(test, feature = "regtest_frsigil"))]
+pub mod frsigil_regtest;
 #[cfg(test)]
 pub mod fuel;
 #[cfg(test)]
